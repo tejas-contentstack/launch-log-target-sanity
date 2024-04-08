@@ -1,0 +1,6 @@
+bin/
+.DS_STORE
+coverage.out
+coverage.html
+otelcol-config.yaml
+.env
