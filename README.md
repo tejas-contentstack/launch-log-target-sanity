@@ -7,13 +7,6 @@ This collector is built in Go and utilizes the OpenTelemetry framework for telem
 ### Prerequisites
 - Go installed version 1.20 >=
 
-### Building the Service
-To build the service with the custom exporter, use the following command:
-```bash
-make build
-```
-This will generate the necessary binary in the 'bin' directory.
-
 ### Setup
 Before running the service, set up the configuration file for the OpenTelemetry collector:
 
