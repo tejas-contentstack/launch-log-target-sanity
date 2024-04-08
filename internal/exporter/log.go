@@ -25,6 +25,6 @@ func (logExporter *LogExporter) pushLogs(ctx context.Context, logs plog.Logs) er
 		return fmt.Errorf("failed to marshal logs to JSON: %v", err)
 	}
 	// Print JSON logs
-	fmt.Println(string(jsonBytes))
+	fmt.Println("logs-->", string(jsonBytes))
 	return nil
 }

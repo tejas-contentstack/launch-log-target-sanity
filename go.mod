@@ -1,4 +1,4 @@
-module github.com/contentstack/contentfly-telemetry-service
+module github.com/venky0195/simple-otel-collector
 
 go 1.20
 
@@ -122,5 +122,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace go.opentelemetry.io/collector/exporter/loggingexporter v0.89.0 => /Users/venkatesh/CFLY/contentfly-telemetry-service/exporter
