@@ -13,7 +13,7 @@ import (
 	otlpreceiver "go.opentelemetry.io/collector/receiver/otlpreceiver"
 )
 
-func components() (otelcol.Factories, error) {
+func components(logExporter *loggingexporter.LogExporter) (otelcol.Factories, error) {
 	var err error
 	factories := otelcol.Factories{}
 
@@ -32,7 +32,7 @@ func components() (otelcol.Factories, error) {
 	}
 
 	factories.Exporters, err = exporter.MakeFactoryMap(
-		loggingexporter.NewFactory(),
+		loggingexporter.NewFactory(logExporter),
 	)
 	if err != nil {
 		return otelcol.Factories{}, err

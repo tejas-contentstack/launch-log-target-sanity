@@ -14,12 +14,12 @@ const (
 	typeStr = "exporter"
 )
 
-func NewFactory() exporter.Factory {
+func NewFactory(logExporter *LogExporter) exporter.Factory {
 	return exporter.NewFactory(
 		typeStr,
 		createDefaultConfig,
 		exporter.WithLogs(func(ctx context.Context, set exporter.CreateSettings, cfg component.Config) (exporter.Logs, error) {
-			return createLogsExporter(ctx, set, cfg)
+			return createLogsExporter(ctx, set, cfg, logExporter)
 		}, component.StabilityLevelAlpha),
 	)
 }
@@ -33,8 +33,8 @@ func createLogsExporter(
 	ctx context.Context,
 	set exporter.CreateSettings,
 	cfg component.Config,
+	logExporter *LogExporter,
 ) (exporter.Logs, error) {
-	logExporter := NewLogExporter()
 
 	return exporterhelper.NewLogsExporter(ctx, set, cfg,
 		func(ctx context.Context, ld plog.Logs) error {

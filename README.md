@@ -23,6 +23,7 @@ This will start the service using the configuration specified in 'otelcol-config
 The HTTP server will be available at the endpoint `localhost:4318`
 The GRPC server will be available at the endpoint `localhost:4317`
 The healthcheck of this service will be available at the endpoint `localhost:13133`
+The custom HTTP server will be available at the endpoint `localhost:8080`
 
 ### Configuration Files
 * `otelcol-config.yaml`: This file is used to configure the Open Telemetry Collector itself.

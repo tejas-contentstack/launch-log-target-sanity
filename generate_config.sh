@@ -28,6 +28,10 @@ extensions:
     endpoint: $HEALTH_CHECK_ENDPOINT
 
 service:
+  telemetry:
+    logs:
+      output_paths: ["stdout"]
+      error_output_paths: ["stderr"]
   extensions: [health_check]
   pipelines:
     logs:
