@@ -46,6 +46,8 @@ The logs will be returned in JSON format.
 Each log entry consists of two fields:
 
 ```javascript
-{ "token" : "The authorization token associated with the log entry",
-"log": "The log message itself." }
+{ 
+    "token" : "The authorization token associated with the log entry",
+    "log": "The log message itself." 
+}
 ```
