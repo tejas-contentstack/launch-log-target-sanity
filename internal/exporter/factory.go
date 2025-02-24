@@ -10,15 +10,11 @@ import (
 	"go.opentelemetry.io/collector/exporter"
 )
 
-const (
-	typeStr = "exporter"
-)
-
 func NewFactory(logExporter *LogExporter) exporter.Factory {
 	return exporter.NewFactory(
-		typeStr,
+		component.MustNewType("exporter"),
 		createDefaultConfig,
-		exporter.WithLogs(func(ctx context.Context, set exporter.CreateSettings, cfg component.Config) (exporter.Logs, error) {
+		exporter.WithLogs(func(ctx context.Context, set exporter.Settings, cfg component.Config) (exporter.Logs, error) {
 			return createLogsExporter(ctx, set, cfg, logExporter)
 		}, component.StabilityLevelAlpha),
 	)
@@ -31,12 +27,12 @@ func createDefaultConfig() component.Config {
 
 func createLogsExporter(
 	ctx context.Context,
-	set exporter.CreateSettings,
+	set exporter.Settings,
 	cfg component.Config,
 	logExporter *LogExporter,
 ) (exporter.Logs, error) {
 
-	return exporterhelper.NewLogsExporter(ctx, set, cfg,
+	return exporterhelper.NewLogs(ctx, set, cfg,
 		func(ctx context.Context, ld plog.Logs) error {
 			return logExporter.pushLogs(ctx, ld)
 		},

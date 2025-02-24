@@ -1,7 +1,7 @@
 package main
 
 import (
-	loggingexporter "github.com/venky0195/simple-otel-collector/internal/exporter"
+	loggingexporter "github.com/tejas-contentstack/launch-log-target-sanity/internal/exporter"
 
 	healthExtension "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension"
 	"go.opentelemetry.io/collector/connector"

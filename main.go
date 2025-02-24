@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -9,15 +10,18 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	loggingexporter "github.com/venky0195/simple-otel-collector/internal/exporter"
+	loggingexporter "github.com/tejas-contentstack/launch-log-target-sanity/internal/exporter"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/confmap"
+	"go.opentelemetry.io/collector/confmap/provider/envprovider"
+	"go.opentelemetry.io/collector/confmap/provider/fileprovider"
 	"go.opentelemetry.io/collector/otelcol"
 )
 
 func main() {
 	info := component.BuildInfo{
-		Command:     "simple-otel-collector",
+		Command:     "launch-log-target-connector-cloudwatch",
 		Description: "Local OpenTelemetry Collector binary",
 		Version:     "1.0.0",
 	}
@@ -25,14 +29,19 @@ func main() {
 	logExporter := loggingexporter.NewLogExporter()
 
 	factories, err := components(logExporter)
-	if err != nil {
-		log.Fatal().Err(err)
-	}
-
 	settings := otelcol.CollectorSettings{
 		BuildInfo: info,
 		Factories: func() (otelcol.Factories, error) {
 			return factories, nil
+		},
+		ConfigProviderSettings: otelcol.ConfigProviderSettings{
+			ResolverSettings: confmap.ResolverSettings{
+				ProviderFactories: []confmap.ProviderFactory{
+					fileprovider.NewFactory(),
+					envprovider.NewFactory(),
+				},
+				DefaultScheme: "env",
+			},
 		},
 	}
 
@@ -41,13 +50,14 @@ func main() {
 			log.Error().Err(runHTTPServerErr).Msg("failed to start HTTP server")
 		}
 	}()
-
 	if runInteractiveErr := runInteractive(settings); err != nil {
 		log.Fatal().Err(runInteractiveErr)
 	}
 }
 
 func runInteractive(params otelcol.CollectorSettings) error {
+
+	fmt.Println("Starting collector...")
 	cmd := otelcol.NewCommand(params)
 	if err := cmd.Execute(); err != nil {
 		log.Fatal().Err(err).Msg("collector server run finished with error:")
@@ -55,6 +65,41 @@ func runInteractive(params otelcol.CollectorSettings) error {
 
 	return nil
 }
+
+// func main() {
+// 	info := component.BuildInfo{
+// 		Command:     "simple-otel-collector",
+// 		Description: "Local OpenTelemetry Collector binary",
+// 		Version:     "1.0.0",
+// 	}
+
+// 	logExporter := loggingexporter.NewLogExporter()
+
+// 	factories, err := components(logExporter)
+// 	if err != nil {
+// 		log.Fatal().Err(err)
+// 	}
+
+// 	settings := otelcol.CollectorSettings{
+// 		BuildInfo: info,
+// 		Factories: func() (otelcol.Factories, error) {
+// 			return factories, nil
+// 		},
+// 	}
+
+// 	if runInteractiveErr := runInteractive(settings); err != nil {
+// 		log.Fatal().Err(runInteractiveErr)
+// 	}
+// }
+
+// func runInteractive(params otelcol.CollectorSettings) error {
+// 	cmd := otelcol.NewCommand(params)
+// 	if err := cmd.Execute(); err != nil {
+// 		log.Fatal().Err(err).Msg("collector server run finished with error:")
+// 	}
+
+// 	return nil
+// }
 
 func runHTTPServer(logExporter *loggingexporter.LogExporter) error {
 	http.HandleFunc("/", logExporter.GetLogsHandler)
