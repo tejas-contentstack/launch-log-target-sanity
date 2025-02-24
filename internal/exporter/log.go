@@ -25,7 +25,7 @@ type LogExporter struct {
 
 const (
 	clearInterval       = 30 * time.Second
-	authorizationHeader = "log-target-secret"
+	authorizationHeader = "authorization"
 )
 
 func NewLogExporter() *LogExporter {
