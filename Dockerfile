@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as build
+FROM golang:1.24-alpine as build
 RUN apk --no-cache add make
 ARG OTEL_BINARY_NAME=simple-otel-collector
 WORKDIR /app
