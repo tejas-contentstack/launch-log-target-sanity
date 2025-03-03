@@ -6,7 +6,7 @@ This collector is built in Go and utilizes the OpenTelemetry framework for telem
 
 ### Prerequisites
 
-- Go installed version 1.20 >=
+- Go installed version 1.24 >=
 
 ### Setup
 
